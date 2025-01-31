@@ -1,7 +1,3 @@
-export const LS = {
-  searchText: 'searchText',
-} as const;
-
 export interface Book {
   uid: string;
   title: string;
