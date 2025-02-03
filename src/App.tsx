@@ -3,11 +3,10 @@ import List from './components/List/List';
 import ErrorBoundary from './Error';
 import ErrorButton from './components/ErrorButton/ErrorButton';
 import { useSearchQuery } from './hooks/useSearchQuery';
+import { Outlet } from 'react-router';
 
-let render = 0;
 function App() {
   const { query, setQuery } = useSearchQuery();
-  console.log('Render app', render++);
 
   return (
     <div
@@ -23,6 +22,7 @@ function App() {
         <header>Book Searching</header>
         <Search searchText={query} setSearchText={setQuery} />
         <List searchText={query} />
+        <Outlet />
         <ErrorButton />
       </ErrorBoundary>
     </div>

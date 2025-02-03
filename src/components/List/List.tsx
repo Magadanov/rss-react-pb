@@ -1,39 +1,59 @@
-import { useState } from 'react';
 import styles from './List.module.scss';
-import { Book } from '../../types/main';
+import { Book, BooksResponse } from '../../types/main';
 import Card from './Card/Card';
-import Pagination from './Pagination/Pagination';
-import { useGetBooks } from './hooks/useGetBooks';
+import Pagination from '../../ui/Pagination/Pagination';
+import { useFetching } from '../../hooks/useFetching';
+import { apiService } from '../../api/apiService';
+import { Loader } from '../../ui/Loader/Loader';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 interface ListProps {
   searchText: string;
 }
-let render = 0;
 
 function List({ searchText }: ListProps) {
-  const [pageNumber, setPageNumber] = useState(0);
-  const { isLoading, error, books, pageData } = useGetBooks({
-    pageNumber,
-    searchValue: searchText,
-  });
+  const { page } = useParams();
+  const navigate = useNavigate();
+  const { fetchData, isLoading, error, data } = useFetching<BooksResponse>(() =>
+    apiService.getBooks({
+      pageNumber: Number(page) || 1,
+      searchValue: searchText,
+    })
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, [page, searchText]);
+
+  const onCardOpen = (id: string) => {
+    navigate('detail/' + id);
+  };
+
+  const setPage = (page: number) => {
+    navigate(`/${page + 1}`);
+  };
 
   if (isLoading) {
-    return <span className="loader" style={{ margin: '0 auto' }}></span>;
+    return <Loader style={{ margin: '0 auto' }} />;
   }
-  console.log('Render list', render++);
 
   return (
     <div className={styles.list}>
-      {books.length > 0 && !error ? (
+      {data && data.books.length > 0 && !error ? (
         <>
           <div className={styles.card}>
             <strong className={styles.title}>Book Title</strong>
             <strong className={styles.pubYear}>Published Year</strong>
           </div>
-          {books.map((book: Book) => (
-            <Card key={book.uid} card={book} />
+          {data.books.map((book: Book) => (
+            <Card
+              key={book.uid}
+              card={book}
+              onClick={() => onCardOpen(book.uid)}
+            />
           ))}
-          <Pagination pageData={pageData!} setPage={setPageNumber} />
+          <Pagination pageData={data.page!} setPage={setPage} />
         </>
       ) : (
         error

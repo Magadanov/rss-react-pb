@@ -1,22 +1,19 @@
 import styles from './Pagination.module.scss';
-import { PageData } from '../../../types/main';
-import React, { SetStateAction } from 'react';
+import { PageData } from '../../types/main';
 
 interface PaginationProps {
   pageData: PageData;
-  setPage: React.Dispatch<SetStateAction<number>>;
+  setPage: (page: number) => void;
 }
-let render = 0;
 
 function Pagination(props: PaginationProps) {
   const prevButtonHandler = () => {
-    props.setPage((prev) => prev - 1);
+    props.setPage(props.pageData.pageNumber - 1);
   };
 
   const nextButtonHandler = () => {
-    props.setPage((prev) => prev + 1);
+    props.setPage(props.pageData.pageNumber + 1);
   };
-  console.log('Render pagination', render++);
 
   return (
     <div className={styles.pagination}>

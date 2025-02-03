@@ -19,3 +19,22 @@ export interface BooksResponse {
   page: PageData;
   books: Book[];
 }
+
+interface Person {
+  uid: string;
+  name: string;
+  placeOfBirth: string;
+  dateOfBirth: string;
+}
+
+export interface BookResponse {
+  book: {
+    uid: string;
+    title: string;
+    publishedYear: number;
+    numberOfPages: number;
+    authors: Person[];
+    artists: Person[];
+    publishers: { uid: string; name: string }[];
+  };
+}

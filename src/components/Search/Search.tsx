@@ -6,8 +6,6 @@ interface SearchProps {
   setSearchText: React.Dispatch<SetStateAction<string>>;
 }
 
-let render = 0;
-
 function Search(props: SearchProps) {
   const [inputText, setInputText] = useState(props.searchText);
 
@@ -19,8 +17,6 @@ function Search(props: SearchProps) {
     const searchValue = inputText.trim();
     props.setSearchText(searchValue);
   };
-
-  console.log('Render search', render++);
 
   return (
     <section className={styles.container}>

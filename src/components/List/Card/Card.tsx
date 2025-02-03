@@ -2,11 +2,12 @@ import styles from '../List.module.scss';
 import { Book } from '../../../types/main';
 import React from 'react';
 
-let render = 0;
-function Card({ card }: { card: Book }) {
-  console.log('Render card', render++);
+function Card({
+  card,
+  ...rest
+}: { card: Book } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} {...rest} style={{ cursor: 'pointer' }}>
       <p className={styles.title}>{card.title}</p>
       <p className={styles.pubYear}>{card.publishedYear}</p>
     </div>
