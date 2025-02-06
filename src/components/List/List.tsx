@@ -5,7 +5,7 @@ import Pagination from '../../ui/Pagination/Pagination';
 import { useFetching } from '../../hooks/useFetching';
 import { apiService } from '../../api/apiService';
 import { Loader } from '../../ui/Loader/Loader';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 interface ListProps {
@@ -26,9 +26,12 @@ function List({ searchText }: ListProps) {
     fetchData();
   }, [page, searchText]);
 
-  const onCardOpen = (id: string) => {
-    navigate('detail/' + id);
-  };
+  const onCardOpen = useCallback(
+    (id: string) => {
+      navigate('detail/' + id);
+    },
+    [navigate]
+  );
 
   const setPage = (page: number) => {
     navigate(`/${page + 1}`);
@@ -56,7 +59,7 @@ function List({ searchText }: ListProps) {
           <Pagination pageData={data.page!} setPage={setPage} />
         </>
       ) : (
-        error
+        error || 'No book found'
       )}
     </div>
   );

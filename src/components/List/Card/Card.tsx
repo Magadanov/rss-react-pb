@@ -7,7 +7,12 @@ function Card({
   ...rest
 }: { card: Book } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={styles.card} {...rest} style={{ cursor: 'pointer' }}>
+    <div
+      className={styles.card}
+      {...rest}
+      style={{ cursor: 'pointer' }}
+      data-testid="card-component"
+    >
       <p className={styles.title}>{card.title}</p>
       <p className={styles.pubYear}>{card.publishedYear}</p>
     </div>

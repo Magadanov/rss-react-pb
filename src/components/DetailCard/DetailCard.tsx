@@ -25,13 +25,18 @@ function DetailCard() {
   return (
     <ModalWindow onClose={onCloseHandler}>
       <div className={styles.detail}>
-        <span className={styles.closeBtn} onClick={onCloseHandler}>
+        <span
+          className={styles.closeBtn}
+          onClick={onCloseHandler}
+          data-testid="close-button"
+        >
           x
         </span>
-        {isLoading && <Loader loaderClass={styles.loader} />}
-        {data ? (
+        {isLoading ? (
+          <Loader loaderClass={styles.loader} />
+        ) : data ? (
           <>
-            <h3>{data.book.title}</h3>
+            <h3>Detail: {data.book.title}</h3>
             <div>
               <strong>Publish year: </strong>
               <span>{data.book.publishedYear}</span>
