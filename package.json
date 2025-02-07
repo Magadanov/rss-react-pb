@@ -1,4 +1,5 @@
 {
+  "homepage": "https://magadanov.github.io/rss-react-pb/hooks-and-routing",
   "name": "class-components",
   "private": true,
   "version": "0.0.0",
@@ -7,6 +8,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "format:fix": "prettier --write .",
     "prepare": "husky",
@@ -36,6 +39,7 @@
     "eslint-plugin-react-compiler": "^19.0.0-beta-27714ef-20250124",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
