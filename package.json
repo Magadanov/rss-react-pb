@@ -1,5 +1,5 @@
 {
-  "homepage": "https://magadanov.github.io/rss-react-pb/hooks-and-routing",
+  "homepage": "https://magadanov.github.io/rss-react-pb/app-state-management",
   "name": "class-components",
   "private": true,
   "version": "0.0.0",
@@ -17,8 +17,10 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-redux": "^9.2.0",
     "react-router": "^7.1.5"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@types/node": "^22.13.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/react-redux": "^7.1.34",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^3.0.5",
     "eslint": "^9.17.0",

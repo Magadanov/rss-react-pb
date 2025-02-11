@@ -1,0 +1,41 @@
+.flyout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background-color: var(--flyout-bg-color);
+  border-radius: 10px;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 10;
+  box-sizing: border-box;
+  opacity: 0;
+  animation: slideInFromBottom 0.3s ease-in forwards;
+}
+
+.flyout.closed {
+  animation: slideOutToBottom 0.3s ease-in forwards;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}

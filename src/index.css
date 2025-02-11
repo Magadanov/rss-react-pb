@@ -1,6 +1,8 @@
 :root {
   --primary-color: #056087;
+  --danger-color: #870505;
   --modal-bg-color: rgba(103, 103, 103, 0.837);
+  --flyout-bg-color: rgba(187, 187, 187, 0.837);
 }
 
 body {
@@ -9,7 +11,27 @@ body {
   justify-content: center;
   min-width: 320px;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+.btn {
+  padding: 10px 15px;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.primary-btn {
+  background-color: var(--primary-color);
+}
+
+.danger-btn {
+  background-color: var(--danger-color);
 }
 
 .loader {

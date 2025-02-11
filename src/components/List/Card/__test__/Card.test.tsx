@@ -2,12 +2,21 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Card from '../Card';
 import { cleanup, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router';
 import { useFetching } from '../../../../hooks/useFetching';
 import DetailCard from '../../../DetailCard/DetailCard';
 import { mockBookData, mockDetailBookData } from '../../../../mocks/mock-data';
 
 vi.mock('../../../../hooks/useFetching');
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  };
+});
 
 describe('Card Component', () => {
   afterEach(() => {
@@ -16,29 +25,26 @@ describe('Card Component', () => {
   });
 
   it('should render relevant card data', async () => {
-    const mockOnCardOpen = vi.fn();
-    render(<Card card={mockBookData} onClick={mockOnCardOpen} />);
+    render(<Card card={mockBookData} />);
     const cardElement = screen.getByTestId('card-component');
     expect(cardElement.textContent).contain(mockBookData.title);
   });
 
   it('should open detailed component', async () => {
     const user = userEvent.setup();
-    const mockOnCardOpen = vi.fn();
+    const navigate = vi.fn();
+    vi.mocked(useNavigate).mockReturnValue(navigate);
 
     render(
       <MemoryRouter>
-        <Card
-          card={mockBookData}
-          onClick={() => mockOnCardOpen(mockBookData.uid)}
-        />
+        <Card card={mockBookData} />
       </MemoryRouter>
     );
 
     const cardElement = screen.getByTestId('card-component');
     await user.click(cardElement);
 
-    expect(mockOnCardOpen).toHaveBeenCalledWith(mockBookData.uid);
+    expect(navigate).toHaveBeenCalledWith(mockBookData.uid);
   });
 
   it('should triggers an additional API when click card', async () => {
@@ -48,20 +54,11 @@ describe('Card Component', () => {
       error: '',
       data: mockDetailBookData,
     });
-    const mockOnCardOpen = vi.fn();
 
     render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Card
-                card={mockBookData}
-                onClick={() => mockOnCardOpen(mockBookData.uid)}
-              />
-            }
-          />
+          <Route path="/" element={<Card card={mockBookData} />} />
           <Route path="/detail/:id" element={<DetailCard />} />
         </Routes>
       </MemoryRouter>
