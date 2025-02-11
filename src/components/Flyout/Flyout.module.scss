@@ -12,6 +12,7 @@
   box-sizing: border-box;
   opacity: 0;
   animation: slideInFromBottom 0.3s ease-in forwards;
+  color: var(--bg-color);
 }
 
 .flyout.closed {

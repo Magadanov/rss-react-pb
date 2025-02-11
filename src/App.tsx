@@ -6,6 +6,7 @@ import { useSearchQuery } from './hooks/useSearchQuery';
 import { Outlet } from 'react-router';
 import styles from './App.module.scss';
 import Flyout from './components/Flyout/Flyout';
+import { Theme } from './ui/Theme/Theme';
 
 function App() {
   const { query, setQuery } = useSearchQuery();
@@ -18,6 +19,7 @@ function App() {
         <List searchText={query} />
         <Flyout />
         <Outlet />
+        <Theme />
         <ErrorButton />
       </ErrorBoundary>
     </div>
