@@ -29,7 +29,7 @@ function Flyout() {
     <div
       className={`${styles.flyout} ${selectedItemsCount === 0 ? styles.closed : ''}`}
     >
-      <span>
+      <span data-testid="selected-item">
         {selectedItemsCount} {selectedItemsCount <= 1 ? 'item' : 'items'}{' '}
         selected
       </span>
