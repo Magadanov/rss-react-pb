@@ -24,7 +24,7 @@ function Pagination(props: PaginationProps) {
       >
         Prev
       </button>
-      <span data-testid="page-number">{props.pageData.pageNumber}</span>
+      <span data-testid="page-number">{props.pageData.pageNumber + 1}</span>
       <button
         type="button"
         disabled={props.pageData.lastPage}

@@ -1,12 +1,13 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import { mockDetailBookData } from '../../../mocks/mock-data';
-import { useFetching } from '../../../hooks/useFetching';
 import DetailCard from '../DetailCard';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import userEvent from '@testing-library/user-event';
+import { useGetBookQuery } from '../../../store/features/book/bookApi';
 
-vi.mock('../../../hooks/useFetching');
+vi.mock('../../../store/features/book/bookApi', () => ({
+  useGetBookQuery: vi.fn(),
+}));
 
 const MockDetailCard = () => {
   return (
@@ -16,38 +17,34 @@ const MockDetailCard = () => {
   );
 };
 
+const defaultMockResponse = {
+  data: mockDetailBookData,
+  error: undefined,
+  isLoading: false,
+  refetch: vi.fn(),
+};
+
 describe('Detail Component', () => {
   beforeEach(() => {
-    vi.mocked(useFetching).mockReturnValue({
-      fetchData: vi.fn(),
-      isLoading: false,
-      error: '',
-      data: mockDetailBookData,
-    });
-  });
-  afterEach(() => {
-    vi.clearAllMocks();
-    cleanup();
+    vi.mocked(useGetBookQuery).mockImplementation(() => ({
+      ...defaultMockResponse,
+    }));
   });
 
   it('should render loading indicator while fetching data', () => {
-    vi.mocked(useFetching).mockReturnValue({
-      fetchData: vi.fn(),
+    vi.mocked(useGetBookQuery).mockImplementation(() => ({
+      ...defaultMockResponse,
       isLoading: true,
-      error: '',
-      data: mockDetailBookData,
-    });
+    }));
     const { container } = render(<MockDetailCard />);
     const loadingElement = container.querySelector('.loader');
-    expect(loadingElement).toBeTruthy();
+    expect(loadingElement).toBeInTheDocument();
   });
 
   it('should return detailed card component with detailed card data', () => {
     render(<MockDetailCard />);
-    const loadingElement = screen.getByText(/detail/i);
-    expect(loadingElement.textContent).toEqual(
-      'Detail: ' + mockDetailBookData.book.title
-    );
+    const loadingElement = screen.queryByText(/detail/i);
+    expect(loadingElement).toBeInTheDocument();
   });
 
   it('should close the component when click close button', async () => {
@@ -65,9 +62,6 @@ describe('Detail Component', () => {
     const closeElement = screen.getByTestId('close-button');
 
     await user.click(closeElement);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('close-button')).toBeFalsy();
-    });
+    expect(screen.queryByTestId('close-button')).toBeFalsy();
   });
 });

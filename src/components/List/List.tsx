@@ -1,12 +1,11 @@
 import styles from './List.module.scss';
-import { Book, BooksResponse } from '../../types/main';
+import { Book } from '../../types/main';
 import Card from './Card/Card';
 import Pagination from '../../ui/Pagination/Pagination';
-import { useFetching } from '../../hooks/useFetching';
-import { apiService } from '../../api/apiService';
 import { Loader } from '../../ui/Loader/Loader';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { useGetBooksMutation } from '../../store/features/book/bookApi';
 
 interface ListProps {
   searchText: string;
@@ -15,23 +14,14 @@ interface ListProps {
 function List({ searchText }: ListProps) {
   const { page } = useParams();
   const navigate = useNavigate();
-  const { fetchData, isLoading, error, data } = useFetching<BooksResponse>(() =>
-    apiService.getBooks({
-      pageNumber: Number(page) || 1,
-      searchValue: searchText,
-    })
-  );
+  const [getBooks, { data, isLoading, error }] = useGetBooksMutation();
 
   useEffect(() => {
-    fetchData();
-  }, [page, searchText]);
-
-  const onCardOpen = useCallback(
-    (id: string) => {
-      navigate('detail/' + id);
-    },
-    [navigate]
-  );
+    getBooks({
+      pageNumber: Number(page) || 1,
+      searchValue: searchText,
+    });
+  }, [getBooks, page, searchText]);
 
   const setPage = (page: number) => {
     navigate(`/${page + 1}`);
@@ -50,16 +40,12 @@ function List({ searchText }: ListProps) {
             <strong className={styles.pubYear}>Published Year</strong>
           </div>
           {data.books.map((book: Book) => (
-            <Card
-              key={book.uid}
-              card={book}
-              onClick={() => onCardOpen(book.uid)}
-            />
+            <Card key={book.uid} card={book} />
           ))}
           <Pagination pageData={data.page!} setPage={setPage} />
         </>
       ) : (
-        error || 'No book found'
+        error && 'No book found'
       )}
     </div>
   );

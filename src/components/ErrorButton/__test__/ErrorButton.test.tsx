@@ -1,22 +1,17 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ErrorButton from '../ErrorButton';
 
 describe('ErrorButton Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-    cleanup();
+  beforeEach(() => {
+    render(<ErrorButton />);
   });
 
   it('should render the button correctly', () => {
-    render(<ErrorButton />);
-
     const button = screen.getByText(/error/i);
-    expect(button).toBeTruthy();
+    expect(button).toBeInTheDocument();
   });
 
   it('should throw an error when the button is clicked', async () => {
-    render(<ErrorButton />);
     const button = screen.getByRole('button');
     expect(() => fireEvent.click(button)).toThrowError('smth error');
   });

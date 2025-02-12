@@ -1,22 +1,13 @@
-import { useEffect } from 'react';
-import { apiService } from '../../api/apiService';
-import { useFetching } from '../../hooks/useFetching';
-import { BookResponse } from '../../types/main';
 import styles from './DetailCard.module.scss';
 import { Loader } from '../../ui/Loader/Loader';
 import { useNavigate, useParams } from 'react-router';
 import { ModalWindow } from '../../ui/ModalWindow/ModalWindow';
+import { useGetBookQuery } from '../../store/features/book/bookApi';
 
 function DetailCard() {
   const { page, id } = useParams();
   const navigate = useNavigate();
-  const { fetchData, isLoading, error, data } = useFetching<BookResponse>(() =>
-    apiService.getBook(id!)
-  );
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
+  const { isLoading, error, data } = useGetBookQuery(id!);
 
   const onCloseHandler = () => {
     navigate(`/${page || 1}`);
@@ -52,7 +43,7 @@ function DetailCard() {
             ))}
           </>
         ) : (
-          error
+          error && 'Smth happened'
         )}
       </div>
     </ModalWindow>
