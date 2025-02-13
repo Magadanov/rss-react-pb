@@ -1,5 +1,6 @@
 :root {
   --primary-color: #056087;
+  --modal-bg-color: rgba(103, 103, 103, 0.837);
 }
 
 body {
@@ -8,6 +9,7 @@ body {
   justify-content: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .loader {

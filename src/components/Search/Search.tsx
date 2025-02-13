@@ -1,50 +1,37 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, SetStateAction, useState } from 'react';
 import styles from './Search.module.scss';
-import { LS } from '../../types/main';
 
 interface SearchProps {
-  setSearchText: (value: string) => void;
+  searchText: string;
+  setSearchText: React.Dispatch<SetStateAction<string>>;
 }
 
-interface SearchState {
-  inputText: string;
+function Search(props: SearchProps) {
+  const [inputText, setInputText] = useState(props.searchText);
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  };
+
+  const onSearchHandler = () => {
+    const searchValue = inputText.trim();
+    props.setSearchText(searchValue);
+  };
+
+  return (
+    <section className={styles.container}>
+      <input
+        type="text"
+        placeholder="Search..."
+        className={styles.input}
+        value={inputText}
+        onChange={onChangeHandler}
+      />
+      <button type="button" className={styles.button} onClick={onSearchHandler}>
+        Search
+      </button>
+    </section>
+  );
 }
 
-class Search extends React.PureComponent<SearchProps, SearchState> {
-  state = {
-    inputText: localStorage.getItem(LS.searchText) || '',
-  };
-
-  onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputText: e.target.value });
-  };
-
-  onSearchHandler = () => {
-    const searchValue = this.state.inputText.trim();
-    localStorage.setItem(LS.searchText, searchValue);
-    this.props.setSearchText(searchValue);
-  };
-
-  render(): React.ReactNode {
-    return (
-      <section className={styles.container}>
-        <input
-          type="text"
-          placeholder="Search..."
-          className={styles.input}
-          value={this.state.inputText}
-          onChange={this.onChangeHandler}
-        />
-        <button
-          type="button"
-          className={styles.button}
-          onClick={this.onSearchHandler}
-        >
-          Search
-        </button>
-      </section>
-    );
-  }
-}
-
-export default Search;
+export default React.memo(Search);

@@ -1,16 +1,22 @@
-import React from 'react';
 import styles from '../List.module.scss';
 import { Book } from '../../../types/main';
+import React from 'react';
 
-class Card extends React.PureComponent<{ card: Book }> {
-  render(): React.ReactNode {
-    return (
-      <div className={styles.card}>
-        <p className={styles.title}>{this.props.card.title}</p>
-        <p className={styles.pubYear}>{this.props.card.publishedYear}</p>
-      </div>
-    );
-  }
+function Card({
+  card,
+  ...rest
+}: { card: Book } & React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={styles.card}
+      {...rest}
+      style={{ cursor: 'pointer' }}
+      data-testid="card-component"
+    >
+      <p className={styles.title}>{card.title}</p>
+      <p className={styles.pubYear}>{card.publishedYear}</p>
+    </div>
+  );
 }
 
-export default Card;
+export default React.memo(Card);

@@ -1,100 +1,68 @@
-import React from 'react';
 import styles from './List.module.scss';
-import { Book, PageData } from '../../types/main';
-import { apiService } from '../../api/apiService';
+import { Book, BooksResponse } from '../../types/main';
 import Card from './Card/Card';
-import Pagination from './Pagination/Pagination';
+import Pagination from '../../ui/Pagination/Pagination';
+import { useFetching } from '../../hooks/useFetching';
+import { apiService } from '../../api/apiService';
+import { Loader } from '../../ui/Loader/Loader';
+import { useCallback, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 interface ListProps {
   searchText: string;
 }
 
-interface ListState {
-  isLoading: boolean;
-  error: string;
-  pageNumber: number;
-  books: Book[];
-  pageData: PageData | null;
-}
+function List({ searchText }: ListProps) {
+  const { page } = useParams();
+  const navigate = useNavigate();
+  const { fetchData, isLoading, error, data } = useFetching<BooksResponse>(() =>
+    apiService.getBooks({
+      pageNumber: Number(page) || 1,
+      searchValue: searchText,
+    })
+  );
 
-class List extends React.Component<ListProps, ListState> {
-  state = {
-    isLoading: true,
-    error: '',
-    pageNumber: 0,
-    books: [],
-    pageData: null,
-  };
-  componentDidMount(): void {
-    this.fetchData(this.props.searchText);
-  }
+  useEffect(() => {
+    fetchData();
+  }, [page, searchText]);
 
-  componentDidUpdate(
-    prevProps: Readonly<ListProps>,
-    prevState: Readonly<ListState>
-  ): void {
-    if (
-      prevProps.searchText !== this.props.searchText ||
-      prevState.pageNumber !== this.state.pageNumber
-    ) {
-      this.fetchData(this.props.searchText);
-    }
-  }
+  const onCardOpen = useCallback(
+    (id: string) => {
+      navigate('detail/' + id);
+    },
+    [navigate]
+  );
 
-  async fetchData(searchValue: string) {
-    try {
-      this.setState({ isLoading: true });
-
-      const data = await apiService.getBooks({
-        pageNumber: this.state.pageNumber,
-        searchValue,
-      });
-
-      this.setState({
-        pageData: data.page,
-        books: data.books,
-        error: '',
-      });
-    } catch (err) {
-      this.setState({
-        error: (err as Error).message,
-      });
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  }
-
-  setPage = (pageNumber: number) => {
-    this.setState({ pageNumber });
+  const setPage = (page: number) => {
+    navigate(`/${page + 1}`);
   };
 
-  render(): React.ReactNode {
-    if (this.state.isLoading) {
-      return <span className="loader" style={{ margin: '0 auto' }}></span>;
-    }
+  if (isLoading) {
+    return <Loader style={{ margin: '0 auto' }} />;
+  }
 
-    return (
-      <div className={styles.list}>
-        {this.state.books.length > 0 && !this.state.error ? (
-          <>
-            <div className={styles.card}>
-              <strong className={styles.title}>Book Title</strong>
-              <strong className={styles.pubYear}>Published Year</strong>
-            </div>
-            {this.state.books.map((book: Book) => (
-              <Card key={book.uid} card={book} />
-            ))}
-            <Pagination
-              pageData={this.state.pageData!}
-              setPage={this.setPage}
+  return (
+    <div className={styles.list}>
+      {data && data.books.length > 0 && !error ? (
+        <>
+          <div className={styles.card}>
+            <strong className={styles.title}>Book Title</strong>
+            <strong className={styles.pubYear}>Published Year</strong>
+          </div>
+          {data.books.map((book: Book) => (
+            <Card
+              key={book.uid}
+              card={book}
+              onClick={() => onCardOpen(book.uid)}
             />
-          </>
-        ) : (
-          this.state.error
-        )}
-      </div>
-    );
-  }
+          ))}
+          <Pagination pageData={data.page!} setPage={setPage} />
+        </>
+      ) : (
+        error || 'No book found'
+      )}
+    </div>
+  );
 }
 
 export default List;
