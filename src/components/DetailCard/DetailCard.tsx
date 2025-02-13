@@ -19,7 +19,7 @@ function DetailCard() {
   }, [id]);
 
   const onCloseHandler = () => {
-    navigate(`/${page || 1}`);
+    navigate(`/${page || ''}`);
   };
 
   return (
