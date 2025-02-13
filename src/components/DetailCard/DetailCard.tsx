@@ -10,7 +10,7 @@ function DetailCard() {
   const { isLoading, error, data } = useGetBookQuery(id!);
 
   const onCloseHandler = () => {
-    navigate(`/${page || 1}`);
+    navigate(`/${page || ''}`);
   };
 
   return (
