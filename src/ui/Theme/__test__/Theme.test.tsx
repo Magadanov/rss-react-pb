@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Theme } from '../Theme';
 import { ThemeProvider } from '../../../context/ThemeContext/ThemeContext';
+import light from '../../../assets/light.svg';
 
 describe('Theme Component', () => {
   it('should render the theme icon correctly', () => {
@@ -26,6 +27,6 @@ describe('Theme Component', () => {
 
     const themeIcon = screen.getByRole('img');
     await user.click(themeIcon);
-    expect(themeIcon).toHaveAttribute('src', 'light.svg');
+    expect(themeIcon).toHaveAttribute('src', light);
   });
 });
