@@ -11,6 +11,13 @@ vi.mock('../../../store/features/book/bookApi', () => ({
   useGetBooksMutation: vi.fn(),
 }));
 
+vi.mock('next/router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    query: { page: '1' },
+  }),
+}));
+
 const defaultMockResponse = {
   refetch: vi.fn(),
   reset: vi.fn(),

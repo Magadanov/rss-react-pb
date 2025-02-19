@@ -1,11 +1,11 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotFound } from '../NotFound';
-import { useNavigate } from 'react-router';
 import userEvent from '@testing-library/user-event';
+import { NextRouter, useRouter } from 'next/router';
 
-vi.mock('react-router', () => ({
-  useNavigate: vi.fn(),
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
 }));
 
 describe('NotFound Component', () => {
@@ -20,14 +20,19 @@ describe('NotFound Component', () => {
     expect(screen.getByText('404')).toBeTruthy();
   });
 
-  it('should navigate to the main page when the button is clicked', () => {
+  it('should navigate to the main page when the button is clicked', async () => {
     const user = userEvent.setup();
+    const pushMock = vi.fn();
+
+    vi.mocked(useRouter).mockReturnValue({
+      push: pushMock,
+    } as unknown as NextRouter);
 
     render(<NotFound />);
 
-    const button = screen.getByText(/return main/i);
+    const button = screen.getByRole('button', { name: /return main/i });
+    await user.click(button);
 
-    user.click(button);
-    expect(useNavigate).toHaveBeenCalled();
+    expect(pushMock).toHaveBeenCalledWith('/');
   });
 });
