@@ -4,12 +4,11 @@ import React, { MouseEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { toggleBook } from '../../../store/features/book/bookSlice';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 
 function Card({ card }: { card: Book }) {
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const { page } = router.query as { page: string };
+  const { page } = useParams() as { page: string };
   const selectedBooks = useAppSelector((state) => state.books.selectedBooks);
   const isChecked = selectedBooks.some((book) => book.uid === card.uid);
 
@@ -17,11 +16,10 @@ function Card({ card }: { card: Book }) {
     e.stopPropagation();
     dispatch(toggleBook({ book: card }));
   };
-
   return (
     <Link
-      href={`${page}/?bookId=${card.uid}`}
-      shallow
+      href={`/${page}/detail/${card.uid}`}
+      scroll={false}
       className={styles.card}
       data-testid="card-component"
     >

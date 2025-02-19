@@ -7,7 +7,9 @@ export const ModalWindow = ({
 }: PropsWithChildren<{ onClose: () => void }>) => {
   return (
     <div className={styles.modal} onClick={onClose}>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
     </div>
   );
 };
