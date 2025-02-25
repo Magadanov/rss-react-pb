@@ -5,7 +5,7 @@ import Pagination from '../../ui/Pagination/Pagination';
 import { Loader } from '../../ui/Loader/Loader';
 import { useEffect } from 'react';
 import { useGetBooksMutation } from '../../store/features/book/bookApi';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 
 interface ListProps {
   searchText: string;
@@ -13,7 +13,7 @@ interface ListProps {
 
 function List({ searchText }: ListProps) {
   const router = useRouter();
-  const { page } = router.query;
+  const { page } = useParams();
   const [getBooks, { data, isLoading, error }] = useGetBooksMutation();
 
   useEffect(() => {

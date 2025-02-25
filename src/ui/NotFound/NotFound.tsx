@@ -1,5 +1,6 @@
+'use client';
+import { useRouter } from 'next/navigation';
 import styles from './NotFound.module.scss';
-import { useRouter } from 'next/router';
 
 export const NotFound = () => {
   const router = useRouter();

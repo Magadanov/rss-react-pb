@@ -25,11 +25,11 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
-    query: { page: '1' },
   }),
+  useParams: () => ({ page: '1' }),
 }));
 
 const renderWithStore = (
@@ -64,7 +64,7 @@ describe('Card Component', () => {
     const cardElement = screen.getByTestId('card-component');
     expect(cardElement).toHaveAttribute(
       'href',
-      `1/?bookId=${mockBookData.uid}`
+      `/1/detail/${mockBookData.uid}`
     );
   });
 
@@ -82,7 +82,7 @@ describe('Card Component', () => {
           <Route path="/" element={<Card card={mockBookData} />} />
           <Route
             path="/detail/:id"
-            element={<DetailCard page="1" id={mockBookData.uid} />}
+            element={<DetailCard id={mockBookData.uid} />}
           />
         </Routes>
       </MemoryRouter>
@@ -92,7 +92,7 @@ describe('Card Component', () => {
 
     render(
       <MemoryRouter initialEntries={[`/detail/${mockBookData.uid}`]}>
-        <DetailCard page="1" id={mockBookData.uid} />
+        <DetailCard id={mockBookData.uid} />
       </MemoryRouter>
     );
 

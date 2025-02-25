@@ -1,15 +1,17 @@
+'use client';
+
 import styles from './DetailCard.module.scss';
 import { Loader } from '../../ui/Loader/Loader';
 import { ModalWindow } from '../../ui/ModalWindow/ModalWindow';
 import { useGetBookQuery } from '../../store/features/book/bookApi';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-function DetailCard({ id, page }: { id: string; page: string }) {
+function DetailCard({ id }: { id: string }) {
   const router = useRouter();
   const { isLoading, error, data } = useGetBookQuery(id);
 
   const onCloseHandler = () => {
-    router.push(`/${page}`, undefined, { shallow: true });
+    router.back();
   };
 
   return (

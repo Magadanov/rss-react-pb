@@ -2,9 +2,10 @@ import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotFound } from '../NotFound';
 import userEvent from '@testing-library/user-event';
-import { NextRouter, useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
@@ -26,7 +27,7 @@ describe('NotFound Component', () => {
 
     vi.mocked(useRouter).mockReturnValue({
       push: pushMock,
-    } as unknown as NextRouter);
+    } as unknown as AppRouterInstance);
 
     render(<NotFound />);
 
