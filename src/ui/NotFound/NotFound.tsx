@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import styles from './NotFound.module.scss';
 
-export const NotFound = () => {
+export default function NotFound() {
   const navigate = useNavigate();
   return (
     <div className={styles.container}>
@@ -12,4 +12,4 @@ export const NotFound = () => {
       </button>
     </div>
   );
-};
+}

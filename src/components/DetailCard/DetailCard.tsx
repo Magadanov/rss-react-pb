@@ -1,13 +1,17 @@
 import styles from './DetailCard.module.scss';
-import { Loader } from '../../ui/Loader/Loader';
 import { useNavigate, useParams } from 'react-router';
 import { ModalWindow } from '../../ui/ModalWindow/ModalWindow';
-import { useGetBookQuery } from '../../store/features/book/bookApi';
+import { apiService } from '../../api/apiService';
+import { BookResponse } from '../../types/main';
 
-function DetailCard() {
-  const { page, id } = useParams();
+export async function loader({ params: { id } }: { params: { id: string } }) {
+  const detailData = await apiService.getBook(id);
+  return detailData;
+}
+
+function DetailCard({ loaderData: data }: { loaderData: BookResponse }) {
+  const { page } = useParams();
   const navigate = useNavigate();
-  const { isLoading, error, data } = useGetBookQuery(id!);
 
   const onCloseHandler = () => {
     navigate(`/${page || ''}`);
@@ -23,9 +27,8 @@ function DetailCard() {
         >
           x
         </span>
-        {isLoading ? (
-          <Loader loaderClass={styles.loader} />
-        ) : data ? (
+
+        {data.book ? (
           <>
             <h3>Detail: {data.book.title}</h3>
             <div>
@@ -43,7 +46,7 @@ function DetailCard() {
             ))}
           </>
         ) : (
-          error && 'Smth happened'
+          'Smth happened'
         )}
       </div>
     </ModalWindow>

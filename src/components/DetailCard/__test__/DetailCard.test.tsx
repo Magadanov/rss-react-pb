@@ -9,10 +9,16 @@ vi.mock('../../../store/features/book/bookApi', () => ({
   useGetBookQuery: vi.fn(),
 }));
 
+vi.mock('../../../api/apiService', () => ({
+  apiService: {
+    getBook: vi.fn().mockResolvedValue(mockDetailBookData),
+  },
+}));
+
 const MockDetailCard = () => {
   return (
     <BrowserRouter>
-      <DetailCard />
+      <DetailCard loaderData={mockDetailBookData} />
     </BrowserRouter>
   );
 };
@@ -31,16 +37,6 @@ describe('Detail Component', () => {
     }));
   });
 
-  it('should render loading indicator while fetching data', () => {
-    vi.mocked(useGetBookQuery).mockImplementation(() => ({
-      ...defaultMockResponse,
-      isLoading: true,
-    }));
-    const { container } = render(<MockDetailCard />);
-    const loadingElement = container.querySelector('.loader');
-    expect(loadingElement).toBeInTheDocument();
-  });
-
   it('should return detailed card component with detailed card data', () => {
     render(<MockDetailCard />);
     const loadingElement = screen.queryByText(/detail/i);
@@ -53,7 +49,10 @@ describe('Detail Component', () => {
     render(
       <MemoryRouter initialEntries={['/detail/1']}>
         <Routes>
-          <Route path="/detail/:id" element={<DetailCard />} />
+          <Route
+            path="/detail/:id"
+            element={<DetailCard loaderData={mockDetailBookData} />}
+          />
           <Route path="/1" element={<div>Home Page</div>} />
         </Routes>
       </MemoryRouter>
