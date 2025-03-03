@@ -1,8 +1,17 @@
 import { Card } from '@app/components/Card/Card';
-import { useAppSelector } from '@app/store';
+import { useAppDispatch, useAppSelector } from '@app/store';
+import { makeFormDataReadable } from '@app/store/reducer/form';
+import { useEffect } from 'react';
 
 export default function Main() {
+  const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.form.data);
+
+  useEffect(() => {
+    return () => {
+      dispatch(makeFormDataReadable());
+    };
+  }, []);
 
   return (
     <div>

@@ -15,6 +15,7 @@ export function Card({ data }: Props) {
     <div className={cn(styles.card, styles[data.gender])}>
       <img src={data.picture} alt="ava" className={styles.card__img} />
       <div className={styles.card__info}>
+        {data.isNew && <span className={styles.new}>New</span>}{' '}
         <h2>{data.name}</h2>
         <div className={cn(styles.card__info_content)}>
           <div>
