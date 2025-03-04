@@ -8,6 +8,6 @@ export interface FormData {
   confirmPassword: string;
   gender: 'F' | 'M';
   isAgreed: boolean;
-  picture: Base64URLString;
+  picture: File;
   country: string;
 }

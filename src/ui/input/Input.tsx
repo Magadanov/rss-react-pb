@@ -1,5 +1,6 @@
 import { cn } from '@app/utils/cn';
 import {
+  ChangeEvent,
   forwardRef,
   InputHTMLAttributes,
   useEffect,
@@ -31,12 +32,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )
         );
       }
+      if (rest.onChange) rest.onChange(e);
     };
 
     const handleSelectOption = (option: string) => {
       if (!inputRef.current) return;
       inputRef.current.value = option;
       setFilteredOptions([]);
+      if (rest.onChange) {
+        console.log(option);
+        rest.onChange({
+          target: { value: option, name: rest.name },
+        } as ChangeEvent<HTMLInputElement>);
+      }
     };
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -67,8 +75,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           }}
           type={type === 'password' ? (isVisible ? 'text' : 'password') : type}
           className={cn(styles.input, error ? styles.error : '')}
-          onChange={handleInputChange}
           {...rest}
+          onChange={handleInputChange}
         />
         {filteredOptions.length > 0 && (
           <ul ref={dropdownRef} className={styles.dropdown}>
