@@ -10,4 +10,8 @@ export default defineConfig({
       '@app': path.resolve(__dirname, 'src'),
     },
   },
+  base: '/rss-react-pb/forms',
+  build: {
+    outDir: 'dist/forms',
+  },
 });
