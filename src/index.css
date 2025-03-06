@@ -1,0 +1,27 @@
+:root {
+  --black-color: #000;
+  --primary-color: #093373;
+  --error-color: red;
+  --light-gray-color: #ccc;
+  --middle-gray-color: #8f8f8f;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  width: 80%;
+  height: calc(100vh - 2rem);
+  margin: 1rem auto;
+  box-sizing: border-box;
+}
+
+.content {
+  flex: 1;
+  box-sizing: border-box;
+}
