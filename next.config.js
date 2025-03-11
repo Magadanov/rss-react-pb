@@ -9,8 +9,6 @@ const nextConfig = {
       },
     ];
   },
-  distDir: './dist/app-state-management',
-  basePath: '/rss-react-pb/app-state-management',
 };
 
 export default nextConfig;
