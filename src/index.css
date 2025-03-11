@@ -1,0 +1,16 @@
+:root {
+  --text-color: #000;
+  --header-bg-color: #002358;
+  --primary-color: #0448ac;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}

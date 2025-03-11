@@ -1,0 +1,17 @@
+.search {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+
+  input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--primary-color);
+
+    &:focus {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid var(--primary-color);
+    }
+  }
+}

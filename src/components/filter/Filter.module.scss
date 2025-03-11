@@ -1,0 +1,10 @@
+.filter {
+  select {
+    border: none;
+    outline: none;
+
+    option:first-child {
+      color: #ccc;
+    }
+  }
+}
