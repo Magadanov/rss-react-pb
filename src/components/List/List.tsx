@@ -4,16 +4,16 @@ import Card from './Card/Card';
 import Pagination from '../../ui/Pagination/Pagination';
 import { Loader } from '../../ui/Loader/Loader';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
 import { useGetBooksMutation } from '../../store/features/book/bookApi';
+import { useRouter } from 'next/router';
 
 interface ListProps {
   searchText: string;
 }
 
 function List({ searchText }: ListProps) {
-  const { page } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { page } = router.query;
   const [getBooks, { data, isLoading, error }] = useGetBooksMutation();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function List({ searchText }: ListProps) {
   }, [getBooks, page, searchText]);
 
   const setPage = (page: number) => {
-    navigate(`/${page + 1}`);
+    router.push(`/${page + 1}`);
   };
 
   if (isLoading) {

@@ -1,7 +1,7 @@
 import Card from '../Card';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes, useNavigate } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import DetailCard from '../../../DetailCard/DetailCard';
 import { mockBookData, mockDetailBookData } from '../../../../mocks/mock-data';
 import { useGetBookQuery } from '../../../../store/features/book/bookApi';
@@ -24,6 +24,13 @@ vi.mock('react-router', async () => {
     useNavigate: vi.fn(),
   };
 });
+
+vi.mock('next/router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    query: { page: '1' },
+  }),
+}));
 
 const renderWithStore = (
   children: React.ReactNode,
@@ -48,10 +55,6 @@ describe('Card Component', () => {
   });
 
   it('should open detailed component', async () => {
-    const user = userEvent.setup();
-    const navigate = vi.fn();
-    vi.mocked(useNavigate).mockReturnValue(navigate);
-
     renderWithStore(
       <MemoryRouter>
         <Card card={mockBookData} />
@@ -59,9 +62,10 @@ describe('Card Component', () => {
     );
 
     const cardElement = screen.getByTestId('card-component');
-    await user.click(cardElement);
-
-    expect(navigate).toHaveBeenCalledWith(`detail/${mockBookData.uid}`);
+    expect(cardElement).toHaveAttribute(
+      'href',
+      `1/?bookId=${mockBookData.uid}`
+    );
   });
 
   it('should triggers an additional API when click card', async () => {
@@ -76,7 +80,10 @@ describe('Card Component', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<Card card={mockBookData} />} />
-          <Route path="/detail/:id" element={<DetailCard />} />
+          <Route
+            path="/detail/:id"
+            element={<DetailCard page="1" id={mockBookData.uid} />}
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -85,7 +92,7 @@ describe('Card Component', () => {
 
     render(
       <MemoryRouter initialEntries={[`/detail/${mockBookData.uid}`]}>
-        <DetailCard />
+        <DetailCard page="1" id={mockBookData.uid} />
       </MemoryRouter>
     );
 

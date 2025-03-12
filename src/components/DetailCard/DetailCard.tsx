@@ -1,16 +1,15 @@
 import styles from './DetailCard.module.scss';
 import { Loader } from '../../ui/Loader/Loader';
-import { useNavigate, useParams } from 'react-router';
 import { ModalWindow } from '../../ui/ModalWindow/ModalWindow';
 import { useGetBookQuery } from '../../store/features/book/bookApi';
+import { useRouter } from 'next/router';
 
-function DetailCard() {
-  const { page, id } = useParams();
-  const navigate = useNavigate();
-  const { isLoading, error, data } = useGetBookQuery(id!);
+function DetailCard({ id, page }: { id: string; page: string }) {
+  const router = useRouter();
+  const { isLoading, error, data } = useGetBookQuery(id);
 
   const onCloseHandler = () => {
-    navigate(`/${page || ''}`);
+    router.push(`/${page}`, undefined, { shallow: true });
   };
 
   return (

@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Theme } from '../Theme';
-import { ThemeProvider } from '../../../context/ThemeContext/ThemeContext';
-import light from '../../../assets/light.svg';
+import { ThemeProvider } from '@/context/ThemeContext/ThemeContext';
+import { Attributes } from 'react';
+
+vi.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: Attributes) => <img {...props} />,
+}));
 
 describe('Theme Component', () => {
   it('should render the theme icon correctly', () => {
@@ -26,7 +31,11 @@ describe('Theme Component', () => {
     );
 
     const themeIcon = screen.getByRole('img');
+    const initialSrc = themeIcon.getAttribute('src');
+
     await user.click(themeIcon);
-    expect(themeIcon).toHaveAttribute('src', light);
+
+    const updatedSrc = themeIcon.getAttribute('src');
+    expect(updatedSrc).not.toBe(initialSrc);
   });
 });

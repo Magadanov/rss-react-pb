@@ -1,13 +1,14 @@
-import { useNavigate } from 'react-router';
 import styles from './NotFound.module.scss';
+import { useRouter } from 'next/router';
 
 export const NotFound = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
+
   return (
     <div className={styles.container}>
       <h1>404</h1>
       <h2>Not Found</h2>
-      <button type="button" onClick={() => navigate('/')}>
+      <button type="button" onClick={() => router.push('/')}>
         Return Main
       </button>
     </div>

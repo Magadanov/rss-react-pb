@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext/ThemeContext';
 import styles from './Theme.module.scss';
-import light from '../../assets/light.svg';
-import dark from '../../assets/dark.svg';
+import light from '@/assets/light.svg';
+import dark from '@/assets/dark.svg';
+import Image from 'next/image';
 
 export const Theme = () => {
   const { darkMode, toggleTheme } = useTheme();
@@ -16,7 +17,7 @@ export const Theme = () => {
   };
 
   return (
-    <img
+    <Image
       src={darkMode ? light : dark}
       alt="theme"
       className={`${styles.theme} ${isRotating ? styles.rotate : ''}`}

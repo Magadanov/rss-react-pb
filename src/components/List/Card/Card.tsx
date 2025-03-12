@@ -3,17 +3,15 @@ import { Book } from '../../../types/main';
 import React, { MouseEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { toggleBook } from '../../../store/features/book/bookSlice';
-import { useNavigate } from 'react-router';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function Card({ card }: { card: Book }) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { page } = router.query as { page: string };
   const selectedBooks = useAppSelector((state) => state.books.selectedBooks);
   const isChecked = selectedBooks.some((book) => book.uid === card.uid);
-
-  const onClickHandler = (id: string) => {
-    navigate('detail/' + id);
-  };
 
   const handleCheckbox = (e: MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -21,9 +19,10 @@ function Card({ card }: { card: Book }) {
   };
 
   return (
-    <div
+    <Link
+      href={`${page}/?bookId=${card.uid}`}
+      shallow
       className={styles.card}
-      onClick={() => onClickHandler(card.uid)}
       data-testid="card-component"
     >
       <p className={styles.title}>{card.title}</p>
@@ -35,7 +34,7 @@ function Card({ card }: { card: Book }) {
         checked={isChecked}
         readOnly
       />
-    </div>
+    </Link>
   );
 }
 
