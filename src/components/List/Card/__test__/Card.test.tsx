@@ -4,16 +4,18 @@ import { userEvent } from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router';
 import DetailCard from '../../../DetailCard/DetailCard';
 import { mockBookData, mockDetailBookData } from '../../../../mocks/mock-data';
-import { useGetBookQuery } from '../../../../store/features/book/bookApi';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import {
   bookReducers,
   BookState,
 } from '../../../../store/features/book/bookSlice';
+import { apiService } from '../../../../api/apiService';
 
-vi.mock('../../../../store/features/book/bookApi', () => ({
-  useGetBookQuery: vi.fn(),
+vi.mock('../../../../api/apiService', () => ({
+  apiService: {
+    getBook: vi.fn(),
+  },
 }));
 
 vi.mock('react-router', async () => {
@@ -65,18 +67,16 @@ describe('Card Component', () => {
   });
 
   it('should triggers an additional API when click card', async () => {
-    vi.mocked(useGetBookQuery).mockReturnValue({
-      refetch: vi.fn(),
-      isLoading: false,
-      error: false,
-      data: mockDetailBookData,
-    });
+    vi.mocked(apiService.getBook).mockResolvedValue(mockDetailBookData);
 
     renderWithStore(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<Card card={mockBookData} />} />
-          <Route path="/detail/:id" element={<DetailCard />} />
+          <Route
+            path="/detail/:id"
+            element={<DetailCard loaderData={mockDetailBookData} />}
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -85,11 +85,13 @@ describe('Card Component', () => {
 
     render(
       <MemoryRouter initialEntries={[`/detail/${mockBookData.uid}`]}>
-        <DetailCard />
+        <DetailCard loaderData={mockDetailBookData} />
       </MemoryRouter>
     );
 
-    expect(useGetBookQuery).toHaveBeenCalled();
+    expect(
+      await screen.findByText(`Detail: ${mockDetailBookData.book.title}`)
+    ).toBeInTheDocument();
   });
 
   it('should add selected book to store when click checkbox', async () => {

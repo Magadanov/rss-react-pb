@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { NotFound } from '../NotFound';
+import NotFound from '../NotFound';
 import { useNavigate } from 'react-router';
 import userEvent from '@testing-library/user-event';
 
