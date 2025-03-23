@@ -1,0 +1,17 @@
+export interface CountryData {
+  name: {
+    common: string;
+    official: string;
+  };
+  region: string;
+  area: number;
+  flag: string;
+  population: number;
+  flags: {
+    png: string;
+    svg: string;
+  };
+  isVisited: boolean;
+}
+
+export type SortingOrderType = 'default' | 'asc' | 'desc';

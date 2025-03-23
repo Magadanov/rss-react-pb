@@ -1,0 +1,17 @@
+.btn {
+  color: #fff;
+  background: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}

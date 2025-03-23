@@ -1,0 +1,11 @@
+.header {
+  min-height: 100px;
+  color: #fff;
+  background: var(--header-bg-color);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  box-sizing: border-box;
+}
