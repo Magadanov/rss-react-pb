@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Filter from '../filter/Filter';
 import ListCard from '../list-card/ListCard';
 import Search from '../search/Search';
@@ -12,22 +12,30 @@ export default function Main() {
   const [searchValue, setSearchValue] = useState<string>();
   const [filterValue, setFilterValue] = useState<string>('');
   const [sortValue, setSortValue] = useState<SortingOrderType>('default');
-  const resultData = data
-    ? data
-        .filter((item) =>
-          searchValue
-            ? item.name.common.toLowerCase().includes(searchValue.toLowerCase())
-            : true
-        )
-        .filter((item) => (filterValue ? item.region === filterValue : true))
-        .sort((a, b) => {
-          if (sortValue === 'asc')
-            return a.name.common.localeCompare(b.name.common);
-          if (sortValue === 'desc')
-            return b.name.common.localeCompare(a.name.common);
-          return 0;
-        })
-    : [];
+  const resultData = useMemo(
+    () =>
+      data
+        ? data
+            .filter((item) =>
+              searchValue
+                ? item.name.common
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+                : true
+            )
+            .filter((item) =>
+              filterValue ? item.region === filterValue : true
+            )
+            .sort((a, b) => {
+              if (sortValue === 'asc')
+                return a.name.common.localeCompare(b.name.common);
+              if (sortValue === 'desc')
+                return b.name.common.localeCompare(a.name.common);
+              return 0;
+            })
+        : [],
+    [data, filterValue, searchValue, sortValue]
+  );
 
   const searchHandler = (value: string) => {
     setSearchValue(value);

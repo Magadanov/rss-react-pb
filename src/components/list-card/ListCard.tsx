@@ -1,12 +1,13 @@
 import { CountryData } from '@app/types/data.type';
 import styles from './ListCard.module.scss';
 import Card from '../card/Card';
+import React from 'react';
 
 interface ListCardProps {
   countries: CountryData[];
 }
 
-export default function ListCard({ countries }: ListCardProps) {
+function ListCard({ countries }: ListCardProps) {
   return (
     <div className={styles.container}>
       {countries.map((country) => (
@@ -15,3 +16,5 @@ export default function ListCard({ countries }: ListCardProps) {
     </div>
   );
 }
+
+export default React.memo(ListCard);

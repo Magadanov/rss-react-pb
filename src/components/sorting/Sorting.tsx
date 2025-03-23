@@ -2,6 +2,7 @@ import { Button } from '@app/ui/button/Button';
 import styles from './Sorting.module.scss';
 import { cn } from '@app/utils/cn';
 import { SortingOrderType } from '@app/types/data.type';
+import { useMemo } from 'react';
 
 interface SortingProps {
   order: SortingOrderType;
@@ -25,7 +26,7 @@ export default function Sorting({ order, sortHandler }: SortingProps) {
     sortHandler(sortingOrder[order]);
   };
 
-  const icon = SortingIcon[order];
+  const icon = useMemo(() => SortingIcon[order], [order]);
   return (
     <Button
       className={cn(styles.sorting, styles[order])}

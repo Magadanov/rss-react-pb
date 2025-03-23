@@ -1,11 +1,12 @@
 import { CountryData } from '@app/types/data.type';
 import styles from './Card.module.scss';
+import React from 'react';
 
 interface CardProps {
   country: CountryData;
 }
 
-export default function Card({ country }: CardProps) {
+function Card({ country }: CardProps) {
   return (
     <div className={styles.card}>
       <img className={styles.flag} src={country.flags.svg} alt="flag" />
@@ -27,3 +28,5 @@ export default function Card({ country }: CardProps) {
     </div>
   );
 }
+
+export default React.memo(Card);
