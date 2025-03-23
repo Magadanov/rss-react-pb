@@ -5,13 +5,24 @@ import React from 'react';
 
 interface ListCardProps {
   countries: CountryData[];
+  visitedCountries: CountryData[];
+  visitedHandler: (item: CountryData) => void;
 }
 
-function ListCard({ countries }: ListCardProps) {
+function ListCard({
+  countries,
+  visitedCountries,
+  visitedHandler,
+}: ListCardProps) {
   return (
     <div className={styles.container}>
       {countries.map((country) => (
-        <Card key={country.name.official} country={country} />
+        <Card
+          key={country.name.official}
+          country={country}
+          visitedCountries={visitedCountries}
+          visitedHandler={visitedHandler}
+        />
       ))}
     </div>
   );

@@ -11,6 +11,7 @@ export interface CountryData {
     png: string;
     svg: string;
   };
+  isVisited: boolean;
 }
 
 export type SortingOrderType = 'default' | 'asc' | 'desc';
